@@ -24,6 +24,32 @@ validateConfig()
 const postmark = require('postmark')
 const client = new postmark.Client(process.env.POSTMARK_SERVER_TOKEN)
 
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  host: 'mymail.mcd.com',
+  port: 587,
+  auth: {
+    user: 'chris.lawrence@uk.mcd.com',
+    pass: 'Trolls1!'
+  }
+});
+
+// var mailOptions = {
+//   from: 'chris.lawrence@uk.mcd.com',
+//   to: 'chris.lawrence@uk.mcd.com',
+//   subject: 'Sending your agreement from CJ Room Ltd.',
+//   text: 'Please see your agreement attached.'
+// };
+
+// transporter.sendMail(mailOptions, function(error, info){
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log('Email sent: ' + info.response);
+//   }
+// });
+
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
@@ -61,16 +87,16 @@ app.post('/sign', (req, res) => {
 /**
  * Generate example agreement
  */
-app.get('/example.pdf', (req, res) => {
-  const template = ejs.compile(agreement)
-  const data = viewData.exampleData
-  data.date = moment().format('MMMM Do, YYYY')
+// app.get('/example.pdf', (req, res) => {
+//   const template = ejs.compile(agreement)
+//   const data = viewData.exampleData
+//   data.date = moment().format('MMMM Do, YYYY')
 
-  createDocument(template(data), (pdf) => {
-    res.contentType("application/pdf");
-    res.end(pdf, 'base64');
-  })
-})
+//   createDocument(template(data), (pdf) => {
+//     res.contentType("application/pdf");
+//     res.end(pdf, 'base64');
+//   })
+// })
 
 
 /**
@@ -85,47 +111,49 @@ app.listen(process.env.PORT || 3000, () => console.log('PactMaker is up and runn
  */
 function sendEmails(data) {
   const attachment = {
-    'Content': data.agreement,
-    'Name': `${data.company}_${data.date}.pdf`,
-    'ContentType': 'application/pdf'
+    'content': new Buffer(data.agreement, 'base64'),
+    'filename': `${data.company}_${data.date}.pdf`,
+    'contentType': 'application/pdf'
   }
 
   // Send email to customer
-  client.sendEmail({
-    'From': process.env.POSTMARK_FROM_ADDRESS,
-    'To': data.email,
-    'Subject': signeeSubject(data),
-    'HtmlBody': emailContentSignee(data),
-    'Attachments': [attachment]
-  }, (err, results) => {
-    if (err) {
-      console.error(err)
-      return
-    }
 
+  transporter.sendMail({
+    from: process.env.POSTMARK_FROM_ADDRESS,
+    to: data.email,
+    subject: signeeSubject(data),
+    html: emailContentSignee(data),
+    attachments: [attachment]
+  }, function(error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
     console.log('Email sent:')
-    console.log(results)
-  })
+    console.log(info)
+  });
+  
 
   // Send email notification to internal team
   if (process.env.INTERNAL_EMAIL_RECIPIENTS) {
     const internalRecipients = process.env.INTERNAL_EMAIL_RECIPIENTS.split(',')
 
     internalRecipients.forEach((email) => {
-      client.sendEmail({
-        'From': process.env.POSTMARK_FROM_ADDRESS,
-        'To': email,
-        'Subject': internalSubject(data),
-        'HtmlBody': emailContentInternal(data),
-        'Attachments': [attachment]
-      }, (err, results) => {
-        if (err) {
-          console.error(err)
-          return
+      transporter.sendMail({
+        from: process.env.POSTMARK_FROM_ADDRESS,
+        to: email,
+        subject: internalSubject(data),
+        html: emailContentInternal(data),
+        attachments: [attachment]
+      }, function(error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
         }
-
         console.log('Email sent:')
-        console.log(results)
+        console.log(info)
       })
     })
   }
