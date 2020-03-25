@@ -35,6 +35,73 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const sql = require("mssql");
+
+// config for your database
+const config = {
+    user: 'sa',
+    password: 'Qwertz7()',
+    server: 'localhost', 
+    database: 'agreements' 
+};
+
+const pool2 = new sql.ConnectionPool(config)
+const pool2Connect = pool2.connect()
+
+pool2.on('error', err => {
+    console.log(err)
+})
+
+//const pool = new sql.Connection(config);
+
+// const poolPromise = new sql.ConnectionPool(config)
+//   .connect()
+//   .then(pool => {
+//     console.log('Connected to MSSQL')
+//     return pool
+//   })
+//   .catch(err => console.log('Database Connection Failed! Bad Config: ', err))
+
+//run a query against the global connection pool
+// function runQuery(query) {
+//   // sql.connect() will return the existing global pool if it exists or create a new one if it doesn't
+//   return sql.connect(config).then((pool) => {
+//     return pool.query(query)
+//   })
+// }
+
+// try {
+//   const pool = await poolPromise
+//   const result = await pool.request()
+//       .input('input_parameter', sql.Int, req.query.input_parameter)
+//       .query('select * from mytable where id = @input_parameter')      
+
+//   res.json(result.recordset)
+// } catch (err) {
+//   res.status(500)
+//   res.send(err.message)
+// }
+
+// // connect to your database
+// sql.connect(config, function (err) {
+
+//     if (err) console.log(err);
+
+//     // create Request object
+//     var request = new sql.Request();
+        
+//     // query to the database and get the records
+//     request.query('select * from staffmembers', function (err, recordset) {
+        
+//         if (err) console.log(err)
+
+//         // send records as a response
+//         console.log(recordset);
+//         //res.send(recordset);
+        
+//     });
+// });
+
 // var mailOptions = {
 //   from: 'chris.lawrence@uk.mcd.com',
 //   to: 'chris.lawrence@uk.mcd.com',
@@ -64,6 +131,32 @@ const viewData = {
  * Index express route
  */
 app.get('/', (req, res) => {
+  // var request = new sql.Request(cp);
+  // request.query('select 1', function(err, recordset) {
+  //   if (err) {
+  //     console.error(err);
+  //     return;
+  //   }
+  //   console.log(result.recordset)
+  // })
+  // runQuery("SELECT 1", function(err, recordset) {
+  //   console.log("Here")
+  //   if (err) {
+  //     console.log(err)
+  //   }
+  //   console.log(recordset)
+  // })
+  // pool2Connect.then((pool) => {
+  //   pool.request() // or: new sql.Request(pool2)
+  //   //.input('input_parameter', sql.Int, 1)
+  //   //.output('output_parameter', sql.VarChar(50))
+  //   .query('SELECT 1', (err, result) => {
+  //       // ... error checks
+  //       console.dir(result)
+  //   })
+  // }).catch(err => {
+  //   console.log(err)
+  // })
   res.render('index', viewData)
 })
 
@@ -79,7 +172,25 @@ app.post('/sign', (req, res) => {
     req.body.agreement = pdfAgreement
     res.render('success', _.merge(viewData, req.body))
 
+    pool2Connect.then((pool) => {
+      pool.request() // or: new sql.Request(pool2)
+      .input('EmailAddress', sql.NVarChar, req.body.email)
+      .input('FullName', sql.NVarChar, req.body.name)
+      .input('Store', sql.NVarChar, req.body.store)
+      .input('Position', sql.NVarChar, req.body.role)
+      .input('AgreementPDF', sql.VarChar, pdfAgreement)
+      //.output('output_parameter', sql.VarChar(50))
+      .query('INSERT INTO agreements (EmailAddress, FullName, Store, Position, AgreementPDF) VALUES (@EmailAddress, @FullName, @Store, @Position, @AgreementPDF)', (err, result) => {
+          // ... error checks
+          console.log(err)
+          console.dir(result)
+      })
+    }).catch(err => {
+      console.log(err)
+    })
+
     sendEmails(req.body)
+    
   })
 })
 
