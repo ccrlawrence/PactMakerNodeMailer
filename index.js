@@ -179,8 +179,9 @@ app.post('/sign', (req, res) => {
       .input('Store', sql.NVarChar, req.body.store)
       .input('Position', sql.NVarChar, req.body.role)
       .input('AgreementPDF', sql.VarChar, pdfAgreement)
+      .input('OptIn', sql.Bit, req.body.optin)
       //.output('output_parameter', sql.VarChar(50))
-      .query('INSERT INTO agreements (EmailAddress, FullName, Store, Position, AgreementPDF) VALUES (@EmailAddress, @FullName, @Store, @Position, @AgreementPDF)', (err, result) => {
+      .query('INSERT INTO agreements (EmailAddress, FullName, Store, Position, AgreementPDF, OptIn) VALUES (@EmailAddress, @FullName, @Store, @Position, @AgreementPDF, @OptIn)', (err, result) => {
           // ... error checks
           console.log(err)
           console.dir(result)

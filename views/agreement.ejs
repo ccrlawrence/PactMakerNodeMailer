@@ -50,8 +50,9 @@
 <body>
   <h1>Furlough Agreement</h1>
 
-  <p>This document was signed by <span class="info"><%= name %></span> on behalf of <span class="info"><%= company %></span>.</p>
+  <p>This document was signed by <span class="info"><%= name %></span> with respect to the letter from <%= company %> dated 26th March 2020.</p>
 
+  <p>I <span class="info"><% if (!locals.optin) { %>DO NOT <% } %>AGREE</span> to the furlough.</p>
   <div class="signature-block">
     <p class="signature-field"><img src="<%= signature %>" height="55"></p>
     <p>Name: <%= name %><br>Role: <%= role %><br>Date: <%= date %></p>

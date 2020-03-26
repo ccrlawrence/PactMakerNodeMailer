@@ -6,7 +6,7 @@
 <body>
   <%- include('partials/masthead') %>
   <div class="container">
-    <p class="intro">Fill out this form to sign the agreement.</p>
+    <p class="intro">Fill out this form to agree to the Furlough as proposed in the letter you received dated 26th March 2020.</p>
 
     <form action="/sign" method="POST">
       <div class="form-row">
@@ -57,6 +57,7 @@
             <option>0090 - Cheltenham</option>
             <option>0115 - Swindon Brunel Centre</option>
             <option>0331 - Cockleberry</option>
+            <option>0574 - Cheltenham</option>
             <option>0591 - Greenbridge</option>
             <option>0922 - Cirencester</option>
             <option>1255 - Watchfield</option>
@@ -102,6 +103,22 @@
                  autocomplete="email"
                  required>
         </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label">
+          <label for="email">Do you wish to opt-in to the furlough agreement?</label>
+        </div>
+        <div class="form-field">
+          <label for="optin">
+            <input type="checkbox"
+                 id="optin"
+                 name="optin"
+                 checked>
+            I agree to the conditions of the furlough.
+          </label>
+        </div>
+        <p class="form-comment">Opting in allows you to qualify for the Government's Coronavirus Retention Scheme.</p>
+        <br/>
         <p class="form-comment">Your agreement will be emailed to you.</p>
       </div>
 
