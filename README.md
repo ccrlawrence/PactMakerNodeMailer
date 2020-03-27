@@ -8,8 +8,6 @@
 
 Inspired by [PactMaker](https://github.com/wildbit/PactMaker) by [Wildbit](https://github.com/wildbit).
 
-![PactMaker Screenshot](media/screenshot.png)
-
 ## Configuration
 Create an environment variable file(`.env`) in the project root with the following variables:
 
