@@ -8,12 +8,24 @@
       "description": "Name of your company or app. This will appear in the header and footer.",
       "value": "PactMaker"
     },
-    "POSTMARK_SERVER_TOKEN": {
-      "description": "Server tokens can be found under the credentials tab on your Postmark server.",
+    "NODEMAILER_HOST": {
+      "description": "Host used for Nodemailer - this is your email server.",
       "value": ""
     },
-    "POSTMARK_FROM_ADDRESS": {
-      "description": "The email address you want to send the email from. You must verify your domain or create a valid Sender Signature on Postmark.",
+    "NODEMAILER_PORT": {
+      "description": "Port for email provider - typically 587.",
+      "value": ""
+    },
+    "NODEMAILER_USER": {
+      "description": "Username for your email provider.",
+      "value": ""
+    },
+    "NODEMAILER_PASS": {
+      "description": "Password for your email provider.",
+      "value": ""
+    },
+    "FROM_ADDRESS": {
+      "description": "The from address for your emails - normally your email address.",
       "value": ""
     },
     "INTERNAL_EMAIL_RECIPIENTS": {

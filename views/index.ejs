@@ -6,7 +6,7 @@
 <body>
   <%- include('partials/masthead') %>
   <div class="container">
-    <p class="intro">Fill out this form to agree to the Furlough as proposed in the letter you received dated 26th March 2020.</p>
+    <p class="intro">Fill out this form to agree to the agreement.</p>
 
     <form action="/sign" method="POST">
       <div class="form-row">
@@ -15,7 +15,7 @@
         </div>
         <div class="form-field">
           <input type="text"
-                 value="CJ Room Ltd T/A McDonald's"
+                 value="Sample Company"
                  id="company"
                  name="company"
                  class="c-input"
@@ -54,17 +54,8 @@
                   oninput="setCustomValidity('')"
                   required>
             <option value="" selected>Please select a store</option>
-            <option>0090 - Cheltenham</option>
-            <option>0115 - Swindon Brunel Centre</option>
-            <option>0331 - Cockleberry</option>
-            <option>0574 - Cheltenham</option>
-            <option>0591 - Greenbridge</option>
-            <option>0922 - Cirencester</option>
-            <option>1255 - Watchfield</option>
-            <option>1291 - Stroud</option>
-            <option>1308 - Asda Swindon</option>
-            <option>1353 - Swindon Orbital</option>
-            <option>1443 - Swindon Bridgemead</option>
+            <option>Option A</option>
+            <option>Option B</option>
           </select>
         </div>
       </div>
@@ -80,10 +71,8 @@
                   oninput="setCustomValidity('')"
                   required>
             <option value="" selected>Please select your role</option>
-            <option>Crew Member</option>
-            <option>Customer Care Assistant</option>
-            <option>Crew Trainer</option>
-            <option>Shift Manager</option>
+            <option>Role 1</option>
+            <option>Role 2</option>
           </select>
         </div>
       </div>
@@ -106,7 +95,7 @@
       </div>
       <div class="form-row">
         <div class="form-label">
-          <label for="email">Do you wish to opt-in to the furlough agreement?</label>
+          <label for="email">Do you wish to opt-in to the agreement?</label>
         </div>
         <div class="form-field">
           <label for="optin">
@@ -114,11 +103,9 @@
                  id="optin"
                  name="optin"
                  checked>
-            I agree to the conditions of the furlough.
+            I agree to the conditions of the agreement.
           </label>
         </div>
-        <p class="form-comment">Opting in allows you to qualify for the Government's Coronavirus Retention Scheme.</p>
-        <br/>
         <p class="form-comment">Your agreement will be emailed to you.</p>
       </div>
 
